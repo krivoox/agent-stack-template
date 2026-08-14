@@ -1,0 +1,36 @@
+---
+description: TDD contract for business logic
+globs: src/domain/**/*.ts,src/features/**/domain/**/*.ts
+alwaysApply: false
+---
+
+# TDD — business logic
+
+Red → green → refactor. The test comes first, and it must fail for the right
+reason before you write the implementation.
+
+## Tested
+
+- `src/domain/**`
+- `src/features/*/domain/**`
+- Any pure calculation or invariant
+
+## Not tested
+
+React components, styles, layout, snapshots. A snapshot test of a component is
+a maintenance cost with no signal — do not add one, even "for coverage".
+
+## Writing the test
+
+- One behaviour per `it`, named as the rule it protects, not as the function it
+  calls: `"rejects a duplicate name regardless of casing"`, not `"works"`.
+- Assert on the error *type* from `src/domain/errors.ts`, not on the message —
+  copy changes, semantics do not.
+- Cover the boundary, not just the happy path: empty input, the limit itself,
+  one past the limit, and the case that must be rejected.
+- No mocks. If a rule needs the clock, a random value or a database row, that
+  input is a parameter — this is what keeps the domain testable.
+
+## Full workflow
+
+`docs/tdd-workflow.md`.

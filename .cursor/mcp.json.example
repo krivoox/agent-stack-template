@@ -1,0 +1,15 @@
+{
+  "//": "Copy to .cursor/mcp.json and edit. That file is git-ignored on purpose: MCP entries carry machine-specific absolute paths and sometimes tokens, so committing them breaks every other clone.",
+  "mcpServers": {
+    "example-http-server": {
+      "url": "https://mcp.example.com/mcp"
+    },
+    "example-local-server": {
+      "command": "/absolute/path/to/binary",
+      "args": ["mcp"],
+      "env": {
+        "SOME_TOOL_HOME": "/absolute/path"
+      }
+    }
+  }
+}

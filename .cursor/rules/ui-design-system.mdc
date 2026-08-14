@@ -1,0 +1,53 @@
+---
+description: UI, design tokens and mobile-first rules
+globs: src/components/**/*.tsx,src/features/**/components/**/*.tsx,src/app/**/*.tsx,src/app/globals.css
+alwaysApply: false
+---
+
+# UI
+
+Source of truth: `DESIGN.md`. Theme tokens: `src/app/globals.css`.
+
+## Before writing UI
+
+1. Reuse `src/components/ui/*`. Extend with a CVA `variant` / `size` rather
+   than a one-off `className`.
+2. Reuse the shell: `ContentPanel`, `SurfaceSection`, `FormSheet`, `FormField`.
+3. No business rules in React.
+
+## Mobile-first
+
+Base styles target a phone (< 640px); enrich upward with `sm:` / `md:` / `lg:`.
+Designing for desktop and patching with `max-md:` is the wrong direction.
+
+- Tables: only identity + the primary value in the base layout; everything else
+  `hidden sm:table-cell`.
+- Forms: one column at base; grids from `sm:`.
+- Primary controls at least ~40px tall on touch.
+
+## Colour
+
+Semantic classes only: `bg-background`, `bg-card`, `text-foreground`,
+`text-muted-foreground`, `bg-primary`, `border-border`, `ring-ring`,
+`sidebar-*`, and the accent tokens (`info`, `success`, `warning`,
+`destructive`).
+
+Forbidden in product UI: hex, raw `rgb()`, and Tailwind colour scales
+(`bg-zinc-50`, `text-blue-600`). A new colour is a token in `:root` / `.dark`
+plus an entry in `@theme inline` — never an inline value.
+
+## Repetition
+
+If a style combination appears three times, it becomes a CVA variant or a
+component. Two is a coincidence; three is a pattern.
+
+## States and motion
+
+Every interactive element needs hover, focus-visible, disabled and loading.
+Every list needs an empty state and an error state. Animate only `transform`
+and `opacity`, under 300ms, and respect `prefers-reduced-motion`.
+
+## Navigation
+
+A new destination goes in `src/components/app-shell/nav-config.ts`. A link
+added directly in a component never gets prefetched and never gets a title.

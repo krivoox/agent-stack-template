@@ -1,0 +1,53 @@
+name: Changelog Unreleased
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+concurrency:
+  group: changelog-unreleased
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  update-unreleased:
+    runs-on: ubuntu-latest
+    # Skip bot commits that only refresh Unreleased (avoid loops)
+    if: github.actor != 'github-actions[bot]' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # Personal repos cannot add github-actions to ruleset bypass.
+          # Use a fine-grained PAT (Contents: R/W) as CHANGELOG_TOKEN — see docs/guides/changelog.md
+          token: ${{ secrets.CHANGELOG_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Regenerate Unreleased section
+        run: npm run changelog
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet -- CHANGELOG.md; then
+            echo "CHANGELOG.md unchanged"
+            exit 0
+          fi
+
+          git add CHANGELOG.md
+          git commit -m "chore(changelog): update Unreleased [skip ci]"
+          git push origin HEAD:develop

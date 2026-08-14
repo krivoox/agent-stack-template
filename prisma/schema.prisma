@@ -1,0 +1,195 @@
+// Template baseline schema.
+//
+// It ships two things and nothing else:
+//   1. The four models Better Auth requires.
+//   2. The tenancy primitive (Workspace / Membership / Invitation) that every
+//      business table in this template is expected to hang off (ADR-003).
+//
+// Add your own models below the tenancy block. Every business table carries a
+// `workspaceId` with `onDelete: Cascade` so deleting a workspace never leaves
+// orphan rows, and every query filters by it.
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+  runtime      = "nodejs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================================
+// Better Auth — field names are dictated by the adapter, do not rename them
+// ============================================================================
+
+model User {
+  id            String   @id
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Profile extensions live here; Better Auth ignores unknown columns as long
+  // as they are nullable or have a default.
+  displayName String?
+  timezone    String  @default("UTC")
+
+  sessions    Session[]
+  accounts    Account[]
+  memberships Membership[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// ============================================================================
+// Tenancy (ADR-003)
+// ============================================================================
+
+enum WorkspaceType {
+  personal
+  group
+}
+
+enum MembershipRole {
+  owner
+  admin
+  member
+  viewer
+}
+
+enum InvitationStatus {
+  pending
+  accepted
+  rejected
+  expired
+}
+
+model Workspace {
+  id        String        @id @default(cuid())
+  name      String
+  type      WorkspaceType
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  memberships Membership[]
+  invitations Invitation[]
+  projects    Project[]
+
+  @@map("workspace")
+}
+
+model Membership {
+  id          String         @id @default(cuid())
+  workspaceId String
+  userId      String
+  role        MembershipRole @default(member)
+  joinedAt    DateTime       @default(now())
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, userId])
+  @@index([userId])
+  @@map("membership")
+}
+
+model Invitation {
+  id              String           @id @default(cuid())
+  workspaceId     String
+  email           String
+  role            MembershipRole   @default(member)
+  token           String           @unique
+  status          InvitationStatus @default(pending)
+  expiresAt       DateTime
+  invitedByUserId String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([email])
+  @@map("invitation")
+}
+
+// ============================================================================
+// Example feature — the reference vertical slice
+// ============================================================================
+//
+// `Project` exists to demonstrate the conventions, not because the template
+// needs projects. Delete it (and `src/features/projects/`) once your own
+// domain replaces it. Note the shape every business table should copy:
+// a `workspaceId` with `onDelete: Cascade` and an index on it.
+
+enum ProjectStatus {
+  active
+  archived
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  workspaceId String
+  name        String
+  description String?
+  status      ProjectStatus @default(active)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, status])
+  @@map("project")
+}

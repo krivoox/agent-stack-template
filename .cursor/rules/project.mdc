@@ -1,0 +1,49 @@
+---
+description: Product, stack and layer contract. Always applies.
+alwaysApply: true
+---
+
+# Project contract
+
+Full guide: `AGENTS.md`. This rule is the always-loaded summary; do not
+duplicate detail here, point to the document that owns it.
+
+## Sources of truth
+
+1. `docs/specs/<feature>.md` — business rules. Never invent one.
+2. `docs/architecture.md` — layers, auth, data, performance.
+3. `docs/stack.md` — what may not be substituted.
+4. `docs/adr/` — accepted decisions.
+5. `DESIGN.md` — UI only.
+
+If a spec lacks the detail you need, update the spec before writing code.
+
+## Stack (do not substitute without an ADR)
+
+Next.js App Router · React · TypeScript strict · Better Auth · Prisma +
+PostgreSQL · Zod + React Hook Form · TanStack Query · Zustand (UI state only) ·
+Tailwind + shadcn/ui · Vitest.
+
+Next.js in this repo may differ from your training data. Check
+`node_modules/next/dist/docs/` before using an API you are unsure about.
+
+## Layers
+
+```
+spec → domain tests → domain → services → actions → UI
+```
+
+- `src/domain/**`, `src/features/*/domain/**` — pure. No Next, React, Prisma or
+  ambient clock.
+- `src/features/*/services/**` — the only place Prisma is called.
+- `src/features/*/actions/**` — `defineAction` / `defineWorkspaceAction` only.
+- `src/app/**` — thin routes: compose, do not compute.
+- `src/lib/env.ts` — the only reader of `process.env`.
+
+## Hard rules
+
+- Business logic in `domain/`, never in a component, action or service.
+- Every business row carries `workspaceId`; every query filters by it.
+- Server Actions are public endpoints: authenticate and authorise inside them.
+- Semantic Tailwind tokens only; mobile-first.
+- Commit only when the user asks.

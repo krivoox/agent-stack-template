@@ -1,0 +1,43 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# testing
+coverage/
+
+# next.js
+.next/
+out/
+build/
+next-env.d.ts
+
+# generated
+src/generated/
+
+# production
+dist/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env — never commit real values; .env.example carries names only
+.env
+.env*.local
+.env.production
+
+# vercel
+.vercel/
+
+# typescript
+*.tsbuildinfo
+
+# Machine-specific agent config: absolute paths and tokens differ per clone.
+.cursor/mcp.json

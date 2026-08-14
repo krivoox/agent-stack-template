@@ -1,0 +1,32 @@
+---
+description: Prisma schema and migration conventions
+globs: prisma/**/*.prisma,prisma.config.ts
+alwaysApply: false
+---
+
+# Prisma schema
+
+1. **Tenancy.** Every business model carries `workspaceId`, a relation with
+   `onDelete: Cascade`, and an index that starts with `workspaceId`. Without
+   the cascade, deleting a workspace orphans rows; without the index, every
+   scoped list is a sequential scan.
+2. **Both sides of a relation** are declared, with explicit `@relation`.
+3. **Ids**: `@id @default(cuid())` for business models. Better Auth models keep
+   the ids the adapter assigns — do not change them.
+4. **Timestamps**: `createdAt @default(now())` and `updatedAt @updatedAt` on
+   anything a user edits.
+5. **Indexes** on every field used in a `where`, `orderBy` or join. Compound
+   indexes follow query order (`@@index([workspaceId, status])`).
+6. **Uniqueness** with `@unique` / `@@unique`. Case-insensitive uniqueness has
+   no direct equivalent — enforce it in the domain and say so in a comment.
+7. **`@@map`** to snake_case table names; the Better Auth models must keep the
+   names the adapter expects.
+
+## Migrations
+
+- `npm run db:migrate` in development; the generated SQL is reviewed, not
+  trusted blindly.
+- A rename that Prisma renders as drop + add is data loss. Split it: add the
+  column, backfill, then remove the old one in a later migration.
+- `npm run db:push` is for local scratch work only. It never runs against a
+  shared database.

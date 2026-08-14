@@ -1,0 +1,133 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # Ignore release commits from the bot (loop guard)
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.actor != 'github-actions[bot]' &&
+       !contains(github.event.head_commit.message, 'chore(release):'))
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # Personal repos cannot add github-actions to ruleset bypass.
+          # Use a fine-grained PAT (Contents: R/W) as CHANGELOG_TOKEN — see docs/guides/changelog.md
+          token: ${{ secrets.CHANGELOG_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Detect existing tags
+        id: tags
+        run: |
+          if git describe --tags --match 'v[0-9]*' --abbrev=0 2>/dev/null; then
+            echo "has_tags=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_tags=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bump version and changelog
+        id: bump
+        run: |
+          CURRENT=$(node -p "require('./package.json').version")
+
+          if [ "${{ steps.tags.outputs.has_tags }}" != "true" ]; then
+            echo "No SemVer tags yet — bootstrapping v${CURRENT}"
+            echo "Keeping committed CHANGELOG.md baseline (not regenerating from empty history)"
+            echo "tag=v${CURRENT}" >> "$GITHUB_OUTPUT"
+            echo "version=${CURRENT}" >> "$GITHUB_OUTPUT"
+            echo "bootstrapped=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          set +e
+          NEXT_TAG=$(npx git-cliff --bumped-version 2>/tmp/cliff-bump.err)
+          STATUS=$?
+          set -e
+          if [ $STATUS -ne 0 ] || [ -z "$NEXT_TAG" ]; then
+            echo "No bump from git-cliff (exit ${STATUS}). Skipping release."
+            cat /tmp/cliff-bump.err || true
+            echo "skipped=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          NEXT_VERSION="${NEXT_TAG#v}"
+          if [ "$NEXT_VERSION" = "$CURRENT" ]; then
+            echo "Version unchanged (${CURRENT}). Skipping release."
+            echo "skipped=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          node scripts/release.mjs
+          echo "tag=${NEXT_TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${NEXT_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "bootstrapped=false" >> "$GITHUB_OUTPUT"
+
+      - name: Commit, tag, and push
+        if: steps.bump.outputs.skipped != 'true' && steps.bump.outputs.tag != ''
+        run: |
+          TAG="${{ steps.bump.outputs.tag }}"
+          git add package.json package-lock.json CHANGELOG.md
+          if git diff --cached --quiet; then
+            echo "Nothing to commit for ${TAG} (bootstrap tag-only is OK)"
+          else
+            git commit -m "chore(release): ${TAG} [skip ci]"
+          fi
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag ${TAG} already exists"
+          else
+            git tag -a "$TAG" -m "Release ${TAG}"
+          fi
+
+          git push origin HEAD:main
+          git push origin "$TAG"
+
+      - name: Create GitHub Release
+        if: steps.bump.outputs.skipped != 'true' && steps.bump.outputs.tag != ''
+        env:
+          GH_TOKEN: ${{ secrets.CHANGELOG_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.bump.outputs.tag }}"
+          if [ "${{ steps.bump.outputs.bootstrapped }}" = "true" ]; then
+            NOTES="$(sed -n '/^## \[0\.1\.0\]/,/^## \[/p' CHANGELOG.md | sed '$d')"
+            if [ -z "$NOTES" ]; then
+              NOTES="Baseline release ${TAG} (changelog + SemVer automation)."
+            fi
+          else
+            NOTES="$(npx git-cliff --latest --strip all)"
+            if [ -z "$NOTES" ]; then
+              NOTES="Release ${TAG}"
+            fi
+          fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "GitHub Release ${TAG} already exists"
+          else
+            gh release create "$TAG" --title "$TAG" --notes "$NOTES"
+          fi
