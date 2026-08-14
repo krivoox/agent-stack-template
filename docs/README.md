@@ -45,3 +45,4 @@ the code, or the spec is out of date — either way, say which.
 - [guides/git-flow.md](./guides/git-flow.md) — branches, PRs, hygiene
 - [guides/changelog.md](./guides/changelog.md) — commits, changelog, releases
 - [guides/new-feature.md](./guides/new-feature.md) — the walkthrough, end to end
+- [AUDIT.md](./AUDIT.md) — what was kept, fixed and dropped from the source patterns
