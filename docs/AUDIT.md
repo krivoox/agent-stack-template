@@ -103,10 +103,14 @@ of the surrounding files. **Fix:** English throughout the template.
 1. Use `npm run init -- --name "…" --slug … --repo owner/name`.
 2. Delete `src/features/projects/` and `docs/specs/03-projects.md` once the
    first real feature exists.
-3. Write the first real spec before writing code. Agents that skip the spec
-   invent rules in the UI.
+3. Write the first real spec before writing code, and mark it Accepted before
+   anyone implements. Agents that skip the spec invent rules in the UI.
+   Classify every request (`AGENTS.md` → "Every turn") so a bug or a chore
+   does not run the feature walkthrough.
 4. Keep the agent OS thin: do not add a sub-agent per feature. Six roles
-   cover the loop; more roles fragment context.
+   cover the loop; more roles fragment context. Work-type playbooks
+   (`docs/guides/new-feature.md`, `bugfix.md`, `refactor.md`, `chore.md`)
+   are cheaper than extra agents.
 5. Prefer extending `globals.css` tokens over introducing a second design
    system.
 6. Turn on branch protection and `Automatically delete head branches` on day
@@ -121,6 +125,7 @@ of the surrounding files. **Fix:** English throughout the template.
 | Re-derive action auth every time | One helper, one review checklist |
 | Invent error shapes per feature | Shared `DomainError` + `toActionError` |
 | Guess the stack from mixed docs | `docs/stack.md` + ADRs match the code |
+| One walkthrough for every kind of work | Classify first; four playbooks |
 | Spanish/English oscillation | English contract everywhere |
 | No CI signal until production | `verify` job on every PR |
 | Finance vocabulary leaks into new products | Generic tenancy + disposable reference feature |

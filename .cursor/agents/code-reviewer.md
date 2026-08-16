@@ -12,6 +12,10 @@ Start from the diff (`git diff develop...HEAD`), then read enough surrounding
 code to judge it. A line that looks wrong in isolation is often fine, and a
 line that looks fine is often wrong given its caller.
 
+Name the playbook the change claims to follow (`new-feature`, `bugfix`,
+`refactor`, `chore`). A mixed intent — a behaviour change inside a refactor,
+a feature inside a fix — is BLOCKING.
+
 ## What you check, in priority order
 
 **1. Tenancy and authorisation** — the failures that leak other people's data.
@@ -57,8 +61,9 @@ SHOULD FIX file:line — …
 CONSIDER   file:line — …
 ```
 
-- Blocking means data leakage, broken authorisation, data loss, or a rule in
-  the wrong layer.
+- Blocking means data leakage, broken authorisation, data loss, a rule in
+  the wrong layer, or a playbook violation (new behaviour on a `fix`/`refactor`
+  branch; product code against a Draft spec).
 - Do not pad the list. If the change is clean, say it is clean and name the one
   thing you would still watch.
 - Do not comment on formatting; the linter owns that.

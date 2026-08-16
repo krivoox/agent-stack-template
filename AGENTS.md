@@ -19,6 +19,36 @@ person's head.
 The included `projects` feature is a **reference vertical slice**, not a
 product. Read it, copy its shape, then delete it.
 
+## Every turn
+
+Classify the work **before** opening a file. Then follow the matching guide.
+Do not start from the layer walkthrough until the type is known.
+
+| The request is… | Do this | Do not |
+|-----------------|---------|--------|
+| A problem, audience or outcome, no spec | `product-manager` → spec Draft | write product code |
+| Spec exists but is Draft, or has open questions | resolve with the user; `domain-architect` if the rules are non-trivial | write product code |
+| Spec **Accepted** or **Shipped**, new behaviour | [new-feature.md](docs/guides/new-feature.md) | skip the spec |
+| Spec and code disagree | say which is wrong; fix that one | invent a third rule |
+| Current behaviour is wrong | [bugfix.md](docs/guides/bugfix.md) | start a feature |
+| Same behaviour, new shape | [refactor.md](docs/guides/refactor.md) | change a spec rule |
+| Tooling, deps, CI, env, docs-only | [chore.md](docs/guides/chore.md) | sneak in behaviour |
+| Copy, layout, existing actions | `ui-ux-developer` | put rules in React |
+| Infra, migrations, deploy, secrets | `devops-engineer` | run destructive commands unasked |
+
+**If a feature spec is Draft, do not write product code.** Accepted and
+Shipped are the implementable states.
+
+### Small or local models
+
+You implement against a closed contract. You do not invent product.
+
+- Classify, then open the matching guide. Do not skip it.
+- If a rule is missing, the spec is Draft, or an ADR would reverse, stop and ask.
+- Copy `src/features/projects/`. Do not invent a parallel shape.
+- `npm run verify` is the gate. A red verify is not a suggestion.
+- Leave scope, missing rules and stack changes to the user.
+
 ## Documentation map
 
 | File | Contents |
@@ -29,6 +59,10 @@ product. Read it, copy its shape, then delete it.
 | [docs/tdd-workflow.md](./docs/tdd-workflow.md) | Red → green → refactor, what is and isn't tested |
 | [docs/guides/git-flow.md](./docs/guides/git-flow.md) | Branches, PRs, hygiene |
 | [docs/guides/changelog.md](./docs/guides/changelog.md) | Conventional Commits, SemVer, releases |
+| [docs/guides/new-feature.md](./docs/guides/new-feature.md) | New behaviour, end to end |
+| [docs/guides/bugfix.md](./docs/guides/bugfix.md) | Wrong current behaviour |
+| [docs/guides/refactor.md](./docs/guides/refactor.md) | Same behaviour, new shape |
+| [docs/guides/chore.md](./docs/guides/chore.md) | Tooling, deps, CI, docs-only |
 | [docs/specs/](./docs/specs/) | Feature specs — the business source of truth |
 | [docs/adr/](./docs/adr/) | Accepted architecture decisions |
 | [DESIGN.md](./DESIGN.md) | Visual system and UI rules |
@@ -36,6 +70,7 @@ product. Read it, copy its shape, then delete it.
 
 ## Order of truth when implementing
 
+0. Classify the work (table above). Open that guide.
 1. `docs/README.md`
 2. The relevant spec in `docs/specs/`
 3. `docs/architecture.md` + `docs/stack.md` + `docs/adr/`
@@ -101,8 +136,9 @@ anywhere else, it is in the wrong place.
 
 ## Feature checklist
 
-- [ ] Spec read; acceptance criteria covered
-- [ ] Domain tests written first and passing
+- [ ] Work type classified; matching guide followed
+- [ ] For new behaviour: spec **Accepted** or **Shipped**; acceptance criteria covered
+- [ ] Domain tests written first and passing (features and domain bugs)
 - [ ] No business logic in UI, actions or services
 - [ ] No UI tests
 - [ ] Every action goes through `defineAction` / `defineWorkspaceAction`
@@ -111,4 +147,4 @@ anywhere else, it is in the wrong place.
 - [ ] `loading.tsx` present for new `(app)` segments
 - [ ] New nav destinations added to `nav-config.ts` so they get prefetched
 - [ ] `npm run verify` green
-- [ ] Branch `feat|fix|chore/*` from `develop`; PR targets `develop`
+- [ ] Branch `feat|fix|chore|refactor|docs/*` from `develop`; PR targets `develop`
