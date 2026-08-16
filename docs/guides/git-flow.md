@@ -15,15 +15,17 @@ which updates `CHANGELOG.md` and the release commit — see
 
 ## Working branches
 
-| Prefix | Use | Base | Target |
-|--------|-----|------|--------|
-| `feat/` | New capability | `develop` | `develop` |
-| `fix/` | Bug fix | `develop` (or `main` for a hotfix) | `develop` (and `main` for a hotfix) |
-| `chore/` | Tooling, dependencies, docs | `develop` | `develop` |
-| `refactor/` | Restructuring with no behaviour change | `develop` | `develop` |
+| Prefix | Use | Base | Target | Playbook |
+|--------|-----|------|--------|----------|
+| `feat/` | New capability | `develop` | `develop` | [new-feature.md](./new-feature.md) |
+| `fix/` | Bug fix | `develop` (or `main` for a hotfix) | `develop` (and `main` for a hotfix) | [bugfix.md](./bugfix.md) |
+| `refactor/` | Restructuring with no behaviour change | `develop` | `develop` | [refactor.md](./refactor.md) |
+| `chore/` | Tooling, dependencies, CI, env | `develop` | `develop` | [chore.md](./chore.md) |
+| `docs/` | Documentation only | `develop` | `develop` | [chore.md](./chore.md) |
 
 Names in kebab-case: `feat/invite-members`, `fix/timezone-boundary`,
-`chore/upgrade-prisma`.
+`chore/upgrade-prisma`. Classify the work in `AGENTS.md` before picking a
+prefix.
 
 ## The loop
 
@@ -34,9 +36,9 @@ main (production)
   │
 develop (preview)
   ↑
-  │  PR feat|fix|chore → develop
+  │  PR feat|fix|chore|refactor|docs → develop
   │
-feat/*  fix/*  chore/*
+feat/*  fix/*  chore/*  refactor/*  docs/*
 ```
 
 ```bash
@@ -107,8 +109,8 @@ the ruleset active and the secret missing, the release job fails at `git push`.
 ## Pre-PR checklist
 
 - [ ] Branched from an updated `develop`
-- [ ] Correct prefix
+- [ ] Correct prefix and matching playbook (`feat` / `fix` / `refactor` / `chore` / `docs`)
 - [ ] PR targets `develop` (or `main`, for a documented hotfix)
 - [ ] `npm run verify` green
-- [ ] Domain tests written for any new business rule
+- [ ] Domain tests written for any new or broken business rule
 - [ ] Branch deleted after merge, local refs pruned

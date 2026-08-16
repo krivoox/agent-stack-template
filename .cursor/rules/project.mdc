@@ -8,6 +8,18 @@ alwaysApply: true
 Full guide: `AGENTS.md`. This rule is the always-loaded summary; do not
 duplicate detail here, point to the document that owns it.
 
+## Work type
+
+Classify first (`AGENTS.md` → "Every turn"). Then open the matching guide.
+
+- New behaviour → spec **Accepted** or **Shipped**, then `docs/guides/new-feature.md`
+- Wrong current behaviour → `docs/guides/bugfix.md`
+- Same behaviour, new shape → `docs/guides/refactor.md`
+- Tooling / deps / CI / docs-only → `docs/guides/chore.md`
+- Problem without a spec → `product-manager`, no product code
+
+If a feature spec is Draft, do not write product code.
+
 ## Sources of truth
 
 1. `docs/specs/<feature>.md` — business rules. Never invent one.

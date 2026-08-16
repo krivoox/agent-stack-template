@@ -28,7 +28,8 @@ You are the wrong agent for CRUD with no invariants. Say so and hand off.
    codes, and the reason each argument is passed in rather than read from
    ambient state.
 5. **Write the Given/When/Then table** covering the happy path, every boundary,
-   and every rejection. Hand this to `software-engineer` as the test list.
+   and every rejection. That table is the test list — it is not a licence to
+   implement until the spec is Accepted.
 
 ## Placement rules
 
@@ -56,5 +57,5 @@ Errors come from `src/domain/errors.ts`. A new error kind needs a reason; a new
 ## Hand-off
 
 Close with: the invariants, the Given/When/Then table, the function contracts,
-what goes where, and any spec text that needs to change before implementation
-starts.
+what goes where, and any spec text that needs to change before the user marks
+the spec Accepted. Do not send `software-engineer` in while Status is Draft.

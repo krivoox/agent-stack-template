@@ -8,6 +8,9 @@
 > A spec describes **what must be true**, not how to build it. If you find
 > yourself naming a component or a table, you are writing the wrong document —
 > that belongs in the PR.
+>
+> **Draft is not implementable.** Product code starts only when Status is
+> Accepted. Shipped means the acceptance criteria are true in `main`.
 
 ## Problem
 

@@ -25,3 +25,5 @@ Full guide: `docs/guides/git-flow.md`.
 6. **Commit only when the user asks.**
 7. Conventional Commits (`feat:`, `fix:`, `chore:` …) — enforced by commitlint
    in the `commit-msg` hook.
+8. Classify first; follow `docs/guides/new-feature.md`, `bugfix.md`,
+   `refactor.md` or `chore.md`. Do not mix intents on one branch.

@@ -1,5 +1,10 @@
 # Building a feature, end to end
 
+This guide is for **new behaviour**. Wrong current behaviour is
+[bugfix.md](./bugfix.md). Same behaviour, new shape is
+[refactor.md](./refactor.md). Tooling and docs-only work is
+[chore.md](./chore.md). Classify in `AGENTS.md` before you start.
+
 The order is not stylistic. Each step produces the input the next one needs, so
 skipping one means inventing that input later — usually in the wrong layer.
 
@@ -21,6 +26,11 @@ git checkout -b feat/<name>
 
 Copy `docs/specs/_template.md`, fill in the rules and the acceptance criteria,
 add it to the table in `docs/README.md`.
+
+**Status must be Accepted (or already Shipped, for follow-on work) before any
+product code.** Draft, open questions, or a spec the user has not signed off
+are not a licence to implement. If you are writing the spec in this step, stop
+after it exists and wait.
 
 If the rules are obvious, this takes ten minutes. If they are not, you have
 just discovered the actual work — and it is much cheaper to discover it here
