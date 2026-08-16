@@ -76,10 +76,13 @@ npm run init -- --name "Acme Ops" --slug acme-ops --repo your-user/acme-ops
 
 ## How to work here
 
-1. Read [AGENTS.md](./AGENTS.md) — the contract for humans and agents.
+1. Read [AGENTS.md](./AGENTS.md) — classify the work, then follow the matching
+   guide.
 2. Branch from `develop`: see [docs/guides/git-flow.md](./docs/guides/git-flow.md).
-3. Spec → domain test → domain → service → action → UI:
-   [docs/guides/new-feature.md](./docs/guides/new-feature.md).
+3. Features: spec **Accepted** or **Shipped** → domain test → domain →
+   service → action → UI
+   ([new-feature.md](./docs/guides/new-feature.md)). Bugs, refactors and chores
+   have their own playbooks under `docs/guides/`.
 4. Open a PR against `develop`. CI must be green.
 
 ## Documentation map
@@ -93,6 +96,7 @@ npm run init -- --name "Acme Ops" --slug acme-ops --repo your-user/acme-ops
 | [docs/domain-model.md](./docs/domain-model.md) | Entities and invariants |
 | [docs/adr/](./docs/adr/) | Architecture decisions |
 | [docs/specs/](./docs/specs/) | Feature specs |
+| [docs/guides/](./docs/guides/) | Feature, bug, refactor, chore playbooks |
 | [DESIGN.md](./DESIGN.md) | Visual system |
 
 ## License

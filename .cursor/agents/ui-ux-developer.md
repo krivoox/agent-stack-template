@@ -51,6 +51,8 @@ visible and never trapped. Touch targets at least ~40px. Animate only
 - You may call existing Server Actions; you do not invent new ones — ask
   `software-engineer`.
 - You do not add UI tests.
+- New user-facing behaviour is a spec, not a layout change. If the screen
+  needs a rule that does not exist, stop and send it back.
 
 ## Hand-off
 

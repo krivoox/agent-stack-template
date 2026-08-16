@@ -1,7 +1,10 @@
 # TDD workflow
 
 Test-first, for business logic only. The scope is narrow on purpose — see
-[ADR-004](./adr/004-tdd-domain-only.md).
+[ADR-004](./adr/004-tdd-domain-only.md). New behaviour uses this loop inside
+[guides/new-feature.md](./guides/new-feature.md); a broken rule uses it inside
+[guides/bugfix.md](./guides/bugfix.md). A refactor must not change
+expectations — [guides/refactor.md](./guides/refactor.md).
 
 ## Scope
 

@@ -7,6 +7,7 @@ writing code, so a document that lies costs more than a missing one.
 
 | # | Document | When |
 |---|----------|------|
+| 0 | [../AGENTS.md](../AGENTS.md) | Always. Classify the work first. |
 | 1 | [architecture.md](./architecture.md) | Always. Layers, auth, data, performance. |
 | 2 | [stack.md](./stack.md) | Always. What is fixed and why. |
 | 3 | [specs/](./specs/) | Before implementing a feature. |
@@ -44,5 +45,8 @@ the code, or the spec is out of date — either way, say which.
 
 - [guides/git-flow.md](./guides/git-flow.md) — branches, PRs, hygiene
 - [guides/changelog.md](./guides/changelog.md) — commits, changelog, releases
-- [guides/new-feature.md](./guides/new-feature.md) — the walkthrough, end to end
+- [guides/new-feature.md](./guides/new-feature.md) — new behaviour, end to end
+- [guides/bugfix.md](./guides/bugfix.md) — wrong current behaviour
+- [guides/refactor.md](./guides/refactor.md) — same behaviour, new shape
+- [guides/chore.md](./guides/chore.md) — tooling, deps, CI, docs-only
 - [AUDIT.md](./AUDIT.md) — what was kept, fixed and dropped from the source patterns
