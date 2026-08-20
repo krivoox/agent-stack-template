@@ -72,9 +72,10 @@ Revert and reclassify.
 
 ## 5. Docs
 
-Update `docs/architecture.md` or `docs/domain-model.md` only when a boundary
-you documented became untrue. Leave specs and ADRs alone unless you are
-proposing a new ADR.
+Tick the **Refactor** row in `AGENTS.md` → "Definition of Done — docs". Update
+`docs/architecture.md` or `docs/domain-model.md` only when a boundary you
+documented became untrue. Leave specs and ADRs alone unless you are proposing
+a new ADR.
 
 ## Hand-off
 

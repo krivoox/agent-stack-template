@@ -9,7 +9,7 @@ see [docs/guides/changelog.md](./docs/guides/changelog.md).
 
 ## [Unreleased]
 
-## [0.1.0]
+## [0.1.0] - 2026-08-20
 
 ### Added
 
@@ -30,3 +30,6 @@ see [docs/guides/changelog.md](./docs/guides/changelog.md).
   deleted.
 - CI: typecheck, lint, test, build and commit-message validation; changelog and
   release automation.
+
+[Unreleased]: https://github.com/krivoox/agent-stack-template/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/krivoox/agent-stack-template/releases/tag/v0.1.0

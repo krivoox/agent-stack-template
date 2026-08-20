@@ -21,65 +21,68 @@ product. Read it, copy its shape, then delete it.
 
 ## Every turn
 
-Classify the work **before** opening a file. Then follow the matching guide.
-Do not start from the layer walkthrough until the type is known.
+Classify **before** opening a file. Open **one** matching guide. Do not read
+the other playbooks, and do not start from the layer walkthrough until the
+type is known.
 
 | The request is… | Do this | Do not |
 |-----------------|---------|--------|
 | A problem, audience or outcome, no spec | `product-manager` → spec Draft | write product code |
 | Spec exists but is Draft, or has open questions | resolve with the user; `domain-architect` if the rules are non-trivial | write product code |
-| Spec **Accepted** or **Shipped**, new behaviour | [new-feature.md](docs/guides/new-feature.md) | skip the spec |
+| Spec **Accepted** or **Shipped**, new behaviour **with a domain rule** | [new-feature.md](docs/guides/new-feature.md) | skip the spec |
+| Spec **Accepted** or **Shipped**, new behaviour **with no domain rule** (wiring, copy, layout only) | [new-feature.md](docs/guides/new-feature.md), skip domain tests and `domain/` | invent a `domain/` function so TDD has a target |
 | Spec and code disagree | say which is wrong; fix that one | invent a third rule |
 | Current behaviour is wrong | [bugfix.md](docs/guides/bugfix.md) | start a feature |
 | Same behaviour, new shape | [refactor.md](docs/guides/refactor.md) | change a spec rule |
-| Tooling, deps, CI, env, docs-only | [chore.md](docs/guides/chore.md) | sneak in behaviour |
-| Copy, layout, existing actions | `ui-ux-developer` | put rules in React |
+| Tooling, deps, CI, env, docs-only | [chore.md](docs/guides/chore.md) | sneak in behaviour; write a domain test |
+| Copy, layout, existing actions | `ui-ux-developer` | put rules in React; TDD the markup |
 | Infra, migrations, deploy, secrets | `devops-engineer` | run destructive commands unasked |
+| The change does not touch `domain/` and adds no business rule | TDD does not apply. `npm run verify` is the gate | invent a test or a domain wrapper |
 
 **If a feature spec is Draft, do not write product code.** Accepted and
 Shipped are the implementable states.
+
+### What to open after classify
+
+The matching guide names the next files. Stop there.
+
+| Type | Open | Leave closed |
+|------|------|--------------|
+| Feature with a domain rule | The spec, [new-feature.md](docs/guides/new-feature.md), [tdd-workflow.md](docs/tdd-workflow.md) | Other guides |
+| Feature, no domain rule | The spec, [new-feature.md](docs/guides/new-feature.md) (skip steps 2–3) | [tdd-workflow.md](docs/tdd-workflow.md) |
+| Bugfix | [bugfix.md](docs/guides/bugfix.md), the spec rule that should hold | [new-feature.md](docs/guides/new-feature.md) |
+| Refactor | [refactor.md](docs/guides/refactor.md) | Specs (they do not move with files) |
+| Chore / docs | [chore.md](docs/guides/chore.md) | Specs, TDD, architecture, stack, DESIGN |
+| UI copy / layout | [DESIGN.md](./DESIGN.md) | [tdd-workflow.md](docs/tdd-workflow.md) |
+
+Open [architecture.md](docs/architecture.md) only when the work moves a layer,
+auth, data or performance boundary. Open [stack.md](docs/stack.md) only when
+adding or substituting a dependency. Open an ADR when that decision already
+exists, or when you must propose a new one.
 
 ### Small or local models
 
 You implement against a closed contract. You do not invent product.
 
-- Classify, then open the matching guide. Do not skip it.
+- Classify, then open the matching guide. Do not skip it. Do not open the others.
 - If a rule is missing, the spec is Draft, or an ADR would reverse, stop and ask.
 - Copy `src/features/projects/`. Do not invent a parallel shape.
+- TDD only when there is a domain rule. Do not invent a function to test.
 - `npm run verify` is the gate. A red verify is not a suggestion.
+- Tick the docs DoD row in this file before the hand-off.
 - Leave scope, missing rules and stack changes to the user.
 
 ## Documentation map
 
-| File | Contents |
-|------|----------|
-| [docs/README.md](./docs/README.md) | Index: specs, ADRs, guides |
-| [docs/architecture.md](./docs/architecture.md) | Layers, folders, auth, data, performance |
-| [docs/stack.md](./docs/stack.md) | Fixed stack and what may not be substituted |
-| [docs/tdd-workflow.md](./docs/tdd-workflow.md) | Red → green → refactor, what is and isn't tested |
-| [docs/guides/git-flow.md](./docs/guides/git-flow.md) | Branches, PRs, hygiene |
-| [docs/guides/changelog.md](./docs/guides/changelog.md) | Conventional Commits, SemVer, releases |
-| [docs/guides/new-feature.md](./docs/guides/new-feature.md) | New behaviour, end to end |
-| [docs/guides/bugfix.md](./docs/guides/bugfix.md) | Wrong current behaviour |
-| [docs/guides/refactor.md](./docs/guides/refactor.md) | Same behaviour, new shape |
-| [docs/guides/chore.md](./docs/guides/chore.md) | Tooling, deps, CI, docs-only |
-| [docs/specs/](./docs/specs/) | Feature specs — the business source of truth |
-| [docs/adr/](./docs/adr/) | Accepted architecture decisions |
-| [DESIGN.md](./DESIGN.md) | Visual system and UI rules |
-| [README.md](./README.md) | Local setup |
+Index: [docs/README.md](./docs/README.md). Open the files the router above
+names, not a reading list.
 
-## Order of truth when implementing
+## When sources disagree
 
-0. Classify the work (table above). Open that guide.
-1. `docs/README.md`
-2. The relevant spec in `docs/specs/`
-3. `docs/architecture.md` + `docs/stack.md` + `docs/adr/`
-4. `docs/tdd-workflow.md`
-5. `DESIGN.md` (UI only)
-
-**Never invent a business rule.** If a spec is missing detail, update the spec
-first, then write the code. A spec that disagrees with the code is a bug in one
-of them — say which.
+A spec beats architecture for a business rule. An ADR beats `stack.md` for a
+decision already taken. Code that contradicts a spec is a bug in one of them —
+say which. Never invent a third rule. If a spec is missing detail, update the
+spec first, then write the code.
 
 ## Stack
 
@@ -93,6 +96,8 @@ ADR and explicit approval:
 - Vitest for domain tests
 
 ## Layers
+
+New behaviour **with** a domain rule (not every turn):
 
 ```
 spec → domain tests → domain → services → actions → UI
@@ -119,8 +124,9 @@ anywhere else, it is in the wrong place.
 
 ## Non-negotiables
 
-- **TDD for business logic.** Test first, in `domain/`. Never test React
-  components, CSS or snapshots.
+- **TDD for business logic only.** Test first, in `domain/`. If the change
+  has no domain rule, TDD does not apply — do not invent a function to test.
+  Never test React components, CSS or snapshots.
 - **Every Server Action re-checks auth.** Use `defineAction` /
   `defineWorkspaceAction` from `src/lib/action.ts`; they enforce session, Zod
   and workspace membership. A Server Action is a public endpoint.
@@ -134,11 +140,24 @@ anywhere else, it is in the wrong place.
 - **Git Flow.** Branch from `develop`; never commit to `main` or `develop`.
 - **Commit only when asked.**
 
+## Definition of Done — docs
+
+`verify` green is not the close. Tick the row for this work type. Mark **N/A**;
+do not skip the row.
+
+| After… | Review (N/A if untouched) |
+|--------|---------------------------|
+| Feature | Spec still true; add it to `docs/README.md` if new. Status stays **Accepted** until the `develop` → `main` release PR sets it to **Shipped**. `domain-model.md` if a table or rule moved. An ADR only if there was a trade-off. `architecture.md` only if a documented boundary moved. |
+| Bugfix | Spec only if it was wrong or silent. No new spec for a typo. |
+| Refactor | `architecture.md` / `domain-model.md` only if a documented boundary moved. Do not edit a spec to match a file move. |
+| Chore | The document this change made untrue. No new spec. No ADR for a linter version. |
+
 ## Feature checklist
 
 - [ ] Work type classified; matching guide followed
 - [ ] For new behaviour: spec **Accepted** or **Shipped**; acceptance criteria covered
-- [ ] Domain tests written first and passing (features and domain bugs)
+- [ ] Domain tests written first and passing **if** this change adds or breaks a domain rule; otherwise the PR says there is none
+- [ ] Docs DoD row above ticked (or N/A)
 - [ ] No business logic in UI, actions or services
 - [ ] No UI tests
 - [ ] Every action goes through `defineAction` / `defineWorkspaceAction`

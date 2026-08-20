@@ -77,8 +77,8 @@ was already green before the test existed has not proved the fix.
 
 ## 6. Docs
 
-Update the spec only when it was wrong or silent. Do not write a new spec for
-a typo.
+Tick the **Bugfix** row in `AGENTS.md` → "Definition of Done — docs". Update the
+spec only when it was wrong or silent. Do not write a new spec for a typo.
 
 ## Hand-off
 

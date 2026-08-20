@@ -14,6 +14,8 @@ coding agents produce consistent work without being told the same things twice.
   <img src="https://img.shields.io/badge/Node-%3E%3D20.11-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node >= 20.11" />
   <img src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript strict" />
   <img src="https://img.shields.io/badge/Tailwind-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind v4" />
+  <a href="https://github.com/krivoox/agent-stack-template/releases"><img src="https://img.shields.io/github/v/release/krivoox/agent-stack-template?style=for-the-badge&label=Release" alt="Latest release" /></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/github/license/krivoox/agent-stack-template?style=for-the-badge" alt="MIT License" /></a>
 </p>
 
 Conventions live in files an agent reads automatically — `AGENTS.md`,
@@ -100,7 +102,37 @@ npm run init -- --name "Acme Ops" --slug acme-ops --repo your-user/acme-ops
    have their own playbooks under `docs/guides/`.
 4. Open a PR against `develop`. CI must be green.
 
+## Changelog and releases
+
+Versions follow [SemVer](https://semver.org/). Every production tag is a
+[GitHub Release](https://github.com/krivoox/agent-stack-template/releases);
+the full history is [CHANGELOG.md](./CHANGELOG.md).
+
+Push to `develop` refreshes `[Unreleased]`. Merging `develop` into `main`
+bumps the version, tags `vX.Y.Z` and publishes the Release. How that is
+derived from Conventional Commits:
+[docs/guides/changelog.md](./docs/guides/changelog.md).
+
+## Contributing
+
+The GitHub **Contributing** tab is [CONTRIBUTING.md](./CONTRIBUTING.md).
+Questions and ideas go to
+[Discussions](https://github.com/krivoox/agent-stack-template/discussions);
+bugs and product changes go to
+[Issues](https://github.com/krivoox/agent-stack-template/issues/new/choose).
+
+### Contributors
+
+<a href="https://github.com/krivoox/agent-stack-template/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=krivoox/agent-stack-template" alt="Contributors to Agent Stack Template" />
+</a>
+
+Anyone whose commit lands on the default branches appears there and on
+[Insights → Contributors](https://github.com/krivoox/agent-stack-template/graphs/contributors).
+
 ## Documentation map
+
+Not a reading order. Classify in [AGENTS.md](./AGENTS.md), then open one guide.
 
 | File | Contents |
 |------|----------|
@@ -116,5 +148,5 @@ npm run init -- --name "Acme Ops" --slug acme-ops --repo your-user/acme-ops
 
 ## License
 
-Private by default when used as a starting point. Publish deliberately if you
-intend the template itself to be public.
+[MIT](./LICENSE). Forks and products generated from this template may keep
+that licence or replace it.

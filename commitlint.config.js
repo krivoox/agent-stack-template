@@ -1,5 +1,5 @@
 /** @type {import('@commitlint/types').UserConfig} */
-module.exports = {
+export default {
   extends: ['@commitlint/config-conventional'],
   rules: {
     'type-enum': [

@@ -24,8 +24,9 @@ alternative worth considering.
 ## Checklist
 
 - [ ] Branched from an updated `develop`; PR targets `develop`
-- [ ] Spec read, updated, or added if the rules changed
-- [ ] Domain tests written first and passing for every new rule
+- [ ] Spec read, updated, or added if the rules changed — or N/A
+- [ ] Domain tests written first and passing for every new or broken domain rule — or the PR says there is none
+- [ ] Docs DoD row in `AGENTS.md` ticked (N/A where nothing drifted)
 - [ ] No business logic in components, actions or services
 - [ ] No UI tests added
 - [ ] Every Server Action goes through `defineAction` / `defineWorkspaceAction`

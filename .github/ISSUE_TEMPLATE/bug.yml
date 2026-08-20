@@ -1,0 +1,46 @@
+name: Bug
+description: Something in this template behaves wrongly.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Questions belong in [Discussions](https://github.com/krivoox/agent-stack-template/discussions).
+        Security reports go to [SECURITY.md](https://github.com/krivoox/agent-stack-template/blob/develop/SECURITY.md), not here.
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+      description: What should have happened.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      description: What happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Steps, a failing domain test, or a minimal diff against this template.
+      placeholder: |
+        1. …
+        2. …
+        3. See error
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Git tag (`v0.1.0`) or commit SHA. `develop` is also fine.
+    validations:
+      required: true
+  - type: textarea
+    id: spec
+    attributes:
+      label: Spec
+      description: Which file in `docs/specs/` this contradicts, if any. Leave blank if the spec is silent.
