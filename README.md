@@ -14,9 +14,6 @@ coding agents produce consistent work without being told the same things twice.
   <img src="https://img.shields.io/badge/Node-%3E%3D20.11-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node >= 20.11" />
   <img src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript strict" />
   <img src="https://img.shields.io/badge/Tailwind-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind v4" />
-  <img src="https://img.shields.io/badge/tenancy-workspace-20C997?style=for-the-badge" alt="Workspace tenancy" />
-  <img src="https://img.shields.io/badge/telemetry-none-546FFF?style=for-the-badge" alt="No telemetry" />
-  <a href="https://github.com/krivoox/agent-stack-template/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/krivoox/agent-stack-template/ci.yml?branch=develop&style=for-the-badge&label=CI" alt="CI" /></a>
 </p>
 
 Conventions live in files an agent reads automatically — `AGENTS.md`,
