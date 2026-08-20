@@ -1,0 +1,20 @@
+title: "[Q&A] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For a confirmed bug, open an [issue](https://github.com/krivoox/agent-stack-template/issues/new/choose).
+        How to work in this repo: [CONTRIBUTING.md](https://github.com/krivoox/agent-stack-template/blob/develop/CONTRIBUTING.md).
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What are you trying to do, and where are you stuck?
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: What you already tried
+      description: Docs you read, commands you ran, error text.

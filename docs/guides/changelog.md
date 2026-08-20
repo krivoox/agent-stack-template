@@ -72,7 +72,11 @@ touches `CHANGELOG.md` and nothing else.
 
 **First release.** With no `v*` tag present, the workflow bootstraps at the
 current `package.json` version and publishes the existing `CHANGELOG.md`
-baseline rather than regenerating from a pre-convention history.
+baseline rather than regenerating from a pre-convention history. The template
+itself starts at **[v0.1.0](https://github.com/krivoox/agent-stack-template/releases/tag/v0.1.0)**.
+
+Published notes live on the repository **Releases** page. `CHANGELOG.md` is
+the same history in the tree, with compare links at the bottom.
 
 ## Local scripts
 

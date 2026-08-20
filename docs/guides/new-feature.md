@@ -6,10 +6,12 @@ This guide is for **new behaviour**. Wrong current behaviour is
 [chore.md](./chore.md). Classify in `AGENTS.md` before you start.
 
 The order is not stylistic. Each step produces the input the next one needs, so
-skipping one means inventing that input later — usually in the wrong layer.
+skipping a step you **need** means inventing that input later — usually in the
+wrong layer. Skipping domain tests when there is **no** domain rule is required,
+not optional.
 
 ```
-spec → domain test → domain → service → action → UI → docs
+spec → (domain test → domain)? → service → action → UI → docs
 ```
 
 Read `src/features/projects/` alongside this guide; it is the same walkthrough
@@ -38,6 +40,13 @@ than three layers down. Ambiguity that survives this step gets resolved by
 whoever writes the code, silently, usually wrongly.
 
 ## 2. Domain tests
+
+**Skip this step and step 3** when the spec has no calculation, invariant,
+authorisation predicate or state machine — only wiring, copy or layout. Do not
+create a `domain/` module so the ritual has a test. Say "no domain rule" in the
+PR and continue at the first layer you actually need (usually schema, action or
+UI). If you are unsure, there is a rule: write it in the spec, then write the
+test.
 
 ```ts
 // src/features/<name>/domain/<thing>.test.ts
@@ -162,10 +171,16 @@ npm run verify   # typecheck + lint + test
 
 ## 9. Docs
 
-Update whatever the change made untrue: the spec, `domain-model.md`, the ADR
-index. A stale document is worse than a missing one, because an agent trusts it.
+Tick the **Feature** row in `AGENTS.md` → "Definition of Done — docs". Mark N/A
+where nothing moved. A stale document is worse than a missing one, because an
+agent trusts it.
 
-If the change was an architectural choice with a real trade-off, write an ADR.
+- Spec still matches the code. Add it to the table in `docs/README.md` if new.
+- Status stays **Accepted** until the `develop` → `main` release PR sets it to
+  **Shipped**.
+- `domain-model.md` if a table or rule moved.
+- An ADR only if there was a real trade-off.
+- `architecture.md` only if a documented boundary moved.
 
 ## 10. PR
 

@@ -14,6 +14,7 @@ name the job → smallest change → verify → docs only if they were untrue
 
 - Do not sneak in behaviour. A dependency bump that "also" changes a rule is
   two patches; split them.
+- Do not write a domain test. A chore has no domain rule; TDD does not apply.
 - Do not put business logic in a config file, a script, or CI.
 - Do not read `process.env` outside `src/lib/env.ts`. A new variable means
   that schema, `.env.example`, and the hosting provider — all three.
@@ -65,8 +66,10 @@ A chore that makes `verify` red is not finished, even if the chore itself
 
 ## 4. Docs
 
-Update a document when this change made it untrue. Do not add a spec. Do not
-write an ADR for a linter version.
+Tick the **Chore** row in `AGENTS.md` → "Definition of Done — docs". Update a
+document when this change made it untrue. Do not add a spec. Do not write an
+ADR for a linter version. Do not open architecture, stack or TDD docs unless
+this chore is about those files.
 
 ## Hand-off
 

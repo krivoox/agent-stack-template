@@ -57,6 +57,11 @@ if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
   process.exit(1);
 }
 
+if (repo && !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo)) {
+  console.error(`--repo must look like owner/name (got "${repo}")`);
+  process.exit(1);
+}
+
 const shortName = name.length <= 12 ? name : name.split(/\s+/)[0] ?? name;
 
 function replaceIn(path, replacements) {
@@ -96,12 +101,21 @@ function replaceIn(path, replacements) {
   const path = join(root, 'package.json');
   const pkg = JSON.parse(readFileSync(path, 'utf8'));
   pkg.name = slug;
+  if (repo) {
+    pkg.repository = {
+      type: 'git',
+      url: `git+https://github.com/${repo}.git`,
+    };
+    pkg.bugs = { url: `https://github.com/${repo}/issues` };
+    pkg.homepage = `https://github.com/${repo}#readme`;
+  }
   writeFileSync(path, `${JSON.stringify(pkg, null, 2)}\n`);
   console.log('updated package.json');
 }
 
 // ─── string replacements across docs / auth ──────────────────────────────────
 const replacements = [
+  ...(repo ? [['krivoox/agent-stack-template', repo]] : []),
   ['Agent Stack Template', name],
   ['agent-stack-template', slug],
 ];
@@ -109,8 +123,20 @@ const replacements = [
 for (const file of [
   'AGENTS.md',
   'README.md',
+  'CONTRIBUTING.md',
+  'CODE_OF_CONDUCT.md',
+  'SUPPORT.md',
+  'SECURITY.md',
+  'LICENSE',
+  'CHANGELOG.md',
   'src/lib/auth.ts',
   'docs/README.md',
+  'docs/guides/changelog.md',
+  '.github/ISSUE_TEMPLATE/config.yml',
+  '.github/ISSUE_TEMPLATE/bug.yml',
+  '.github/ISSUE_TEMPLATE/feature.yml',
+  '.github/DISCUSSION_TEMPLATE/q-a.yml',
+  '.github/DISCUSSION_TEMPLATE/ideas.yml',
 ]) {
   replaceIn(file, replacements);
 }
@@ -126,11 +152,6 @@ Identity set:
 if (!repo) {
   console.log('Next: cp .env.example .env.local && npm install && npm run db:migrate');
   process.exit(0);
-}
-
-if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo)) {
-  console.error(`--repo must look like owner/name (got "${repo}")`);
-  process.exit(1);
 }
 
 try {

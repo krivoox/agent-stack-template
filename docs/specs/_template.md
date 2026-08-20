@@ -10,7 +10,8 @@
 > that belongs in the PR.
 >
 > **Draft is not implementable.** Product code starts only when Status is
-> Accepted. Shipped means the acceptance criteria are true in `main`.
+> Accepted. Shipped means the acceptance criteria are true in `main`. The
+> `develop` → `main` release PR flips Accepted → Shipped — not the feature PR.
 
 ## Problem
 

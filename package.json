@@ -2,6 +2,16 @@
   "name": "agent-stack-template",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "description": "Agent-first multi-tenant Next.js template (rules, sub-agents, skills, Better Auth, Prisma)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krivoox/agent-stack-template.git"
+  },
+  "bugs": {
+    "url": "https://github.com/krivoox/agent-stack-template/issues"
+  },
+  "homepage": "https://github.com/krivoox/agent-stack-template#readme",
   "type": "module",
   "engines": {
     "node": ">=20.11"

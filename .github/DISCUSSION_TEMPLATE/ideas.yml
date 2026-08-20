@@ -1,0 +1,21 @@
+title: "[Idea] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for a direction, not a finished spec. If the rules are already
+        clear, open a [feature issue](https://github.com/krivoox/agent-stack-template/issues/new?template=feature.yml)
+        instead.
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idea
+      description: What should become easier, and for whom.
+    validations:
+      required: true
+  - type: textarea
+    id: today
+    attributes:
+      label: Today
+      description: What a maintainer or a fork has to do instead.
