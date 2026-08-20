@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Ask a question
+    url: https://github.com/krivoox/agent-stack-template/discussions/new?category=q-a
+    about: How-to, setup, and "is this expected?" — not a bug.
+  - name: Propose an idea
+    url: https://github.com/krivoox/agent-stack-template/discussions/new?category=ideas
+    about: Shape a change before it becomes a spec or a PR.
+  - name: How to contribute
+    url: https://github.com/krivoox/agent-stack-template/blob/develop/CONTRIBUTING.md
+    about: Branching, Conventional Commits, and the PR checklist.

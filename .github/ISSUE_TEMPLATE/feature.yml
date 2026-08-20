@@ -1,0 +1,39 @@
+name: Feature
+description: New behaviour that should become a spec, then a PR.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not skip the spec. A feature without rules in `docs/specs/` is
+        invented behaviour. Half-formed ideas belong in
+        [Discussions → Ideas](https://github.com/krivoox/agent-stack-template/discussions/new?category=ideas).
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Who is blocked, and what they cannot do today.
+    validations:
+      required: true
+  - type: textarea
+    id: behaviour
+    attributes:
+      label: Proposed behaviour
+      description: Concrete rules, not UI sketches. These will be copied into a spec.
+    validations:
+      required: true
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope
+      description: What this must not change. Empty is fine if the cut is obvious.
+  - type: dropdown
+    id: willing
+    attributes:
+      label: Can you open a PR?
+      options:
+        - "Yes, against develop"
+        - "I can help write the spec"
+        - "No, reporting only"
+    validations:
+      required: true

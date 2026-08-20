@@ -20,6 +20,18 @@ Services and actions are not unit-tested. They contain no rules — if one does,
 the fix is to move the rule into `domain/`, not to write a test with a mocked
 Prisma client.
 
+## When TDD does not apply
+
+Do not start this loop if the change has no domain rule. That includes chores,
+copy, layout, wiring (a wrong `revalidatePath`, a missing `workspaceId` filter,
+a route that calls the wrong action), and refactors that do not move behaviour.
+
+`npm run verify` is the gate. Inventing a `domain/` wrapper so a test exists is
+a spec smell: either there is a rule (write it in the spec, then TDD it) or
+there is not (stop).
+
+The loop below is for `src/domain/**` and `src/features/*/domain/**` only.
+
 ## The loop
 
 ### 1. Red

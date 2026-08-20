@@ -52,7 +52,8 @@ gh pr create --base develop
 
 After the merge, CI regenerates the `[Unreleased]` section. When `develop` is
 ready to ship, open a PR from `develop` to `main`; the release workflow bumps
-the version, tags it and publishes the GitHub Release.
+the version, tags it and publishes the GitHub Release. That PR also sets every
+spec whose behaviour is now on `main` from **Accepted** to **Shipped**.
 
 ## Hotfix
 
@@ -71,7 +72,10 @@ that only lands on `main` is silently reverted by the next release.
 
 1. Turn on **Settings → General → Pull Requests → Automatically delete head
    branches**.
-2. After a merge, clean up locally:
+2. GitHub **Releases** is the public changelog. **Discussions** is for questions
+   and ideas. The **Contributing** tab appears once `CONTRIBUTING.md` is on
+   `main`.
+3. After a merge, clean up locally:
 
 ```bash
 git checkout develop && git pull origin develop
@@ -79,7 +83,7 @@ git branch -d feat/<name>
 git fetch --prune
 ```
 
-3. Never reuse a merged branch for new work. Branch again from an updated
+4. Never reuse a merged branch for new work. Branch again from an updated
    `develop`.
 
 ## Rules for agents
@@ -112,5 +116,6 @@ the ruleset active and the secret missing, the release job fails at `git push`.
 - [ ] Correct prefix and matching playbook (`feat` / `fix` / `refactor` / `chore` / `docs`)
 - [ ] PR targets `develop` (or `main`, for a documented hotfix)
 - [ ] `npm run verify` green
-- [ ] Domain tests written for any new or broken business rule
+- [ ] Domain tests written for any new or broken business rule, or the PR says there is none
+- [ ] Docs DoD row in `AGENTS.md` ticked (N/A where nothing drifted)
 - [ ] Branch deleted after merge, local refs pruned

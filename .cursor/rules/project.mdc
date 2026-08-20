@@ -10,23 +10,27 @@ duplicate detail here, point to the document that owns it.
 
 ## Work type
 
-Classify first (`AGENTS.md` → "Every turn"). Then open the matching guide.
+Classify first (`AGENTS.md` → "Every turn"). Open **that** guide only.
 
-- New behaviour → spec **Accepted** or **Shipped**, then `docs/guides/new-feature.md`
+- New behaviour **with** a domain rule → spec **Accepted** or **Shipped**, then `docs/guides/new-feature.md`
+- New behaviour **without** a domain rule → same guide; skip tests and `domain/`. Do not invent a function to TDD
 - Wrong current behaviour → `docs/guides/bugfix.md`
 - Same behaviour, new shape → `docs/guides/refactor.md`
 - Tooling / deps / CI / docs-only → `docs/guides/chore.md`
 - Problem without a spec → `product-manager`, no product code
 
-If a feature spec is Draft, do not write product code.
+If a feature spec is Draft, do not write product code. TDD applies only when
+the change adds or breaks a domain rule — `AGENTS.md` → "Definition of Done".
 
 ## Sources of truth
 
+When they conflict, this order wins. Open a file only if this turn needs it.
+
 1. `docs/specs/<feature>.md` — business rules. Never invent one.
-2. `docs/architecture.md` — layers, auth, data, performance.
-3. `docs/stack.md` — what may not be substituted.
-4. `docs/adr/` — accepted decisions.
-5. `DESIGN.md` — UI only.
+2. `docs/architecture.md` — when a layer, auth, data or performance boundary moves
+3. `docs/stack.md` — when adding or substituting a dependency
+4. `docs/adr/` — accepted decisions, when that decision is in play
+5. `DESIGN.md` — UI only
 
 If a spec lacks the detail you need, update the spec before writing code.
 
@@ -41,9 +45,8 @@ Next.js in this repo may differ from your training data. Check
 
 ## Layers
 
-```
-spec → domain tests → domain → services → actions → UI
-```
+New behaviour **with** a domain rule (not every turn):
+`spec → domain tests → domain → services → actions → UI`
 
 - `src/domain/**`, `src/features/*/domain/**` — pure. No Next, React, Prisma or
   ambient clock.

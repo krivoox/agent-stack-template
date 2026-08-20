@@ -3,17 +3,23 @@
 Documentation is part of the product here. An agent reads these files before
 writing code, so a document that lies costs more than a missing one.
 
-## Read in this order
+## Open after classify
 
-| # | Document | When |
-|---|----------|------|
-| 0 | [../AGENTS.md](../AGENTS.md) | Always. Classify the work first. |
-| 1 | [architecture.md](./architecture.md) | Always. Layers, auth, data, performance. |
-| 2 | [stack.md](./stack.md) | Always. What is fixed and why. |
-| 3 | [specs/](./specs/) | Before implementing a feature. |
-| 4 | [domain-model.md](./domain-model.md) | Before touching the schema or a domain rule. |
-| 5 | [tdd-workflow.md](./tdd-workflow.md) | Before writing a domain test. |
-| 6 | [../DESIGN.md](../DESIGN.md) | Before writing UI. |
+Do not read this index as a stack. Classify in [../AGENTS.md](../AGENTS.md),
+open **one** guide, then only the files that row names.
+
+| Document | When |
+|----------|------|
+| [../AGENTS.md](../AGENTS.md) | Classify first. Then stop until the type is known. |
+| The matching [guide](#guides) | After classify. It names what else to open. |
+| [architecture.md](./architecture.md) | The work moves a layer, auth, data or performance boundary — not every turn |
+| [stack.md](./stack.md) | Adding or substituting a dependency |
+| [specs/](./specs/) | Implementing or fixing behaviour a spec owns |
+| [domain-model.md](./domain-model.md) | Touching the schema or a domain rule |
+| [tdd-workflow.md](./tdd-workflow.md) | Writing a domain test. Skip if there is no domain rule. |
+| [../DESIGN.md](../DESIGN.md) | Writing UI |
+
+Close with the docs row in `AGENTS.md` → "Definition of Done — docs".
 
 ## Decisions
 
@@ -40,6 +46,16 @@ the code, or the spec is out of date — either way, say which.
 | [01-auth.md](./specs/01-auth.md) | Registration, sign-in, password reset, profile |
 | [02-workspaces.md](./specs/02-workspaces.md) | Tenancy, membership, roles |
 | [03-projects.md](./specs/03-projects.md) | Reference feature — delete with the code |
+
+## Community (GitHub)
+
+- [../CONTRIBUTING.md](../CONTRIBUTING.md) — Contributing tab, how to land a PR
+- [../CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md) — Code of conduct tab
+- [../SUPPORT.md](../SUPPORT.md) — Questions vs issues vs security
+- [../CHANGELOG.md](../CHANGELOG.md) — Keep a Changelog history
+- [Releases](https://github.com/krivoox/agent-stack-template/releases) — tagged GitHub Releases
+- [Discussions](https://github.com/krivoox/agent-stack-template/discussions) — Q&A and ideas
+- [Contributors](https://github.com/krivoox/agent-stack-template/graphs/contributors)
 
 ## Guides
 
