@@ -6,8 +6,10 @@ import {
   toActionError,
   type ActionResult,
 } from "@/lib/action-result";
-import { requireMembership } from "@/features/workspaces/services/require-membership";
-import type { MembershipContext } from "@/features/workspaces/services/require-membership";
+import {
+  requireMembership,
+  type MembershipContext,
+} from "@/lib/tenancy";
 
 /**
  * The four steps every Server Action must perform, in one place.

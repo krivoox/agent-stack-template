@@ -1,34 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
-
-/** Auth forms. Public, but a signed-in user is bounced away by the page itself. */
-const AUTH_FORM_ROUTES = [
-  "/login",
-  "/register",
-  "/forgot-password",
-  "/reset-password",
-];
-
-/** Public routes that both guests and signed-in users may visit. */
-const ALWAYS_PUBLIC_PREFIXES: string[] = [];
-
-const PUBLIC_EXACT = new Set([
-  "/",
-  "/robots.txt",
-  "/sitemap.xml",
-  "/manifest.webmanifest",
-]);
-
-function matchesPrefix(pathname: string, prefixes: string[]): boolean {
-  return prefixes.some((p) => pathname === p || pathname.startsWith(`${p}/`));
-}
-
-function isPublicPath(pathname: string): boolean {
-  if (PUBLIC_EXACT.has(pathname)) return true;
-  if (matchesPrefix(pathname, AUTH_FORM_ROUTES)) return true;
-  if (matchesPrefix(pathname, ALWAYS_PUBLIC_PREFIXES)) return true;
-  return false;
-}
+import { isPublicPath } from "@/lib/routes";
 
 /**
  * Cheap gate, not the security boundary.
@@ -51,7 +23,6 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Layouts have no access to the URL; this header is how they read it.
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-pathname", pathname);
 

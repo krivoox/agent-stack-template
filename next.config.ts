@@ -1,13 +1,10 @@
 import type { NextConfig } from "next";
+import { PRIVATE_ROUTE_PREFIXES } from "./src/lib/routes";
 
 /**
- * Authenticated route prefixes served with `private, no-store`.
- *
- * Anything showing per-user data must never be cached by a CDN or a shared
- * proxy. Add a prefix here when you add a segment under `(app)`; both the bare
- * path and its children are covered.
+ * Authenticated prefixes come from `src/lib/routes.ts` so headers, middleware
+ * and docs stay aligned. Served with `private, no-store`.
  */
-const PRIVATE_ROUTE_PREFIXES = ["/dashboard", "/settings"];
 
 const NO_STORE = [{ key: "Cache-Control", value: "private, no-store" }];
 
