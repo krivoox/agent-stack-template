@@ -11,7 +11,7 @@ import { z } from "zod";
 
 const isProd = process.env.NODE_ENV === "production";
 
-/** Optional locally so `pnpm dev` works on a fresh clone; mandatory in prod. */
+/** Optional locally so `npm run dev` works on a fresh clone; mandatory in prod. */
 const requiredInProd = <T extends z.ZodTypeAny>(schema: T) =>
   isProd ? schema : schema.optional();
 
