@@ -1,6 +1,6 @@
 import "server-only";
 import type { z } from "zod";
-import { getSession } from "@/lib/session";
+import { getSession, requireFreshSession } from "@/lib/session";
 import {
   invalidInput,
   toActionError,
@@ -48,6 +48,8 @@ export type SessionContext = {
 
 type DefineActionOptions<TSchema extends z.ZodTypeAny, TOutput> = {
   input?: TSchema;
+  /** Re-check the session in the DB; reject if older than 30 minutes. */
+  requireFresh?: boolean;
   /** Map a domain `code` to specific user-facing copy for this action. */
   errors?: Record<string, string>;
   handler: (
@@ -58,6 +60,7 @@ type DefineActionOptions<TSchema extends z.ZodTypeAny, TOutput> = {
 type DefineWorkspaceActionOptions<TSchema extends z.ZodTypeAny, TOutput> = {
   /** Must resolve a `workspaceId`; it is what the membership check runs on. */
   input: TSchema;
+  requireFresh?: boolean;
   errors?: Record<string, string>;
   handler: (
     args: ActionHandlerArgs<z.infer<TSchema>, MembershipContext>,
@@ -67,13 +70,19 @@ type DefineWorkspaceActionOptions<TSchema extends z.ZodTypeAny, TOutput> = {
 /** Authenticated action with no workspace scope (profile, account settings…). */
 export function defineAction<TSchema extends z.ZodTypeAny, TOutput = void>({
   input: schema,
+  requireFresh,
   errors,
   handler,
 }: DefineActionOptions<TSchema, TOutput>) {
   return async (raw?: unknown): Promise<ActionResult<TOutput>> => {
     try {
-      const session = await getSession();
-      const userId = session?.user?.id;
+      let userId: string | undefined;
+      if (requireFresh) {
+        ({ userId } = await requireFreshSession());
+      } else {
+        const session = await getSession();
+        userId = session?.user?.id;
+      }
       if (!userId) {
         return { ok: false, error: "Sign in to continue.", code: "auth.unauthenticated" };
       }
@@ -98,11 +107,21 @@ export function defineAction<TSchema extends z.ZodTypeAny, TOutput = void>({
 export function defineWorkspaceAction<
   TSchema extends z.ZodTypeAny,
   TOutput = void,
->({ input: schema, errors, handler }: DefineWorkspaceActionOptions<TSchema, TOutput>) {
+>({
+  input: schema,
+  requireFresh,
+  errors,
+  handler,
+}: DefineWorkspaceActionOptions<TSchema, TOutput>) {
   return async (raw?: unknown): Promise<ActionResult<TOutput>> => {
     try {
-      const session = await getSession();
-      const userId = session?.user?.id;
+      let userId: string | undefined;
+      if (requireFresh) {
+        ({ userId } = await requireFreshSession());
+      } else {
+        const session = await getSession();
+        userId = session?.user?.id;
+      }
       if (!userId) {
         return { ok: false, error: "Sign in to continue.", code: "auth.unauthenticated" };
       }
