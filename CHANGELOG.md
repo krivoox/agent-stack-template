@@ -21,6 +21,14 @@ see [docs/guides/changelog.md](./docs/guides/changelog.md).
 
 - **http:** Add security headers and tighten CSP defaults
 
+- **auth:** Hash invitation tokens and add IDOR service tests
+
+- **workspaces:** Store invitation token hashes
+
+- **actions:** Enforce minRole on workspace mutations
+
+- **actions:** Add minRole default member to defineWorkspaceAction
+
 ### Fixed
 
 - **auth:** Accept requireFresh on defineAction
