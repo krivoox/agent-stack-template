@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache";
 
 import { defineWorkspaceAction } from "@/lib/action";
-import { assertCanWrite, assertRole } from "@/features/workspaces/domain";
 import {
   createProjectSchema,
   projectIdSchema,
@@ -16,18 +15,10 @@ import {
   setProjectStatus,
 } from "@/features/projects/services";
 
-/**
- * Reference actions.
- *
- * `defineWorkspaceAction` has already authenticated the caller, validated the
- * input and loaded the membership by the time a handler runs, so a handler
- * only expresses the role rule and the mutation.
- */
-
 export const createProjectAction = defineWorkspaceAction({
   input: createProjectSchema,
+  minRole: "member",
   handler: async ({ input, ctx }) => {
-    assertCanWrite(ctx.role);
     await createProject({
       workspaceId: ctx.workspaceId,
       name: input.name,
@@ -39,8 +30,8 @@ export const createProjectAction = defineWorkspaceAction({
 
 export const renameProjectAction = defineWorkspaceAction({
   input: renameProjectSchema,
+  minRole: "member",
   handler: async ({ input, ctx }) => {
-    assertCanWrite(ctx.role);
     await renameProject({
       workspaceId: ctx.workspaceId,
       projectId: input.projectId,
@@ -52,8 +43,8 @@ export const renameProjectAction = defineWorkspaceAction({
 
 export const archiveProjectAction = defineWorkspaceAction({
   input: projectIdSchema,
+  minRole: "member",
   handler: async ({ input, ctx }) => {
-    assertCanWrite(ctx.role);
     await setProjectStatus({
       workspaceId: ctx.workspaceId,
       projectId: input.projectId,
@@ -65,8 +56,8 @@ export const archiveProjectAction = defineWorkspaceAction({
 
 export const restoreProjectAction = defineWorkspaceAction({
   input: projectIdSchema,
+  minRole: "member",
   handler: async ({ input, ctx }) => {
-    assertCanWrite(ctx.role);
     await setProjectStatus({
       workspaceId: ctx.workspaceId,
       projectId: input.projectId,
@@ -78,9 +69,8 @@ export const restoreProjectAction = defineWorkspaceAction({
 
 export const deleteProjectAction = defineWorkspaceAction({
   input: projectIdSchema,
+  minRole: "admin",
   handler: async ({ input, ctx }) => {
-    // Irreversible, so it takes more than the generic write gate.
-    assertRole(ctx.role, "admin");
     await deleteProject({
       workspaceId: ctx.workspaceId,
       projectId: input.projectId,
