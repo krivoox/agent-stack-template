@@ -24,9 +24,9 @@ function shouldLogQueries(): boolean {
  */
 function createPgPool(): Pool {
   const pool = new Pool({
-    connectionString: env.DATABASE_URL ?? "",
-    // Dev + warm serverless: keep this low; each instance multiplies against the pooler.
-    max: env.NODE_ENV === "production" ? 5 : 5,
+    connectionString: env.DATABASE_URL,
+    // Keep this low; each instance multiplies against the pooler.
+    max: 5,
     idleTimeoutMillis: 15_000,
     connectionTimeoutMillis: 10_000,
     allowExitOnIdle: env.NODE_ENV === "production",
@@ -63,19 +63,19 @@ function createPrismaClient(): PrismaClient {
 }
 
 /**
- * HMR / long-lived `globalThis` can keep a PrismaClient from before a schema
- * change. Recreate when required delegates are missing (ADR-006 / SPEC-19).
+ * HMR can keep a PrismaClient from before a schema change. Recreate when the
+ * template tenancy delegates are missing.
  */
 function hasRequiredDelegates(client: PrismaClient): boolean {
   const c = client as PrismaClient & {
-    workspaceConsolidationRate?: { findUnique?: unknown };
-    currencyExchange?: { findUnique?: unknown };
-    usdQuoteSnapshot?: { findFirst?: unknown };
+    user?: { findUnique?: unknown };
+    workspace?: { findUnique?: unknown };
+    membership?: { findUnique?: unknown };
   };
   return (
-    typeof c.workspaceConsolidationRate?.findUnique === "function" &&
-    typeof c.currencyExchange?.findUnique === "function" &&
-    typeof c.usdQuoteSnapshot?.findFirst === "function"
+    typeof c.user?.findUnique === "function" &&
+    typeof c.workspace?.findUnique === "function" &&
+    typeof c.membership?.findUnique === "function"
   );
 }
 
