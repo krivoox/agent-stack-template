@@ -9,6 +9,22 @@ see [docs/guides/changelog.md](./docs/guides/changelog.md).
 
 ## [Unreleased]
 
+### Added
+
+- **auth:** Add fail-closed mailer, log helper and cron auth
+
+- **auth:** Fail-closed linking, oauth state, mailer env and headers
+
+- **auth:** Wire fail-closed Better Auth defaults
+
+- **auth:** Add mailer and relax-flag env vars
+
+- **http:** Add security headers and tighten CSP defaults
+
+### Fixed
+
+- **auth:** Accept requireFresh on defineAction
+
 ## [0.1.0] - 2026-08-20
 
 ### Added
