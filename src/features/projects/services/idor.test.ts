@@ -4,21 +4,26 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
  * Services are server-only. Vitest has no RSC boundary, so the package
  * throws unless we stub it. Prisma is mocked — this suite only checks that
  * writes are scoped by workspaceId.
+ *
+ * Factories passed to vi.mock are hoisted: any spies they close over must
+ * come from vi.hoisted, not from a later const.
  */
 vi.mock("server-only", () => ({}));
 
-const findFirst = vi.fn();
-const deleteMany = vi.fn();
-const update = vi.fn();
-const findMany = vi.fn();
+const prismaMocks = vi.hoisted(() => ({
+  findFirst: vi.fn(),
+  deleteMany: vi.fn(),
+  update: vi.fn(),
+  findMany: vi.fn(),
+}));
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     project: {
-      findFirst,
-      findMany,
-      deleteMany,
-      update,
+      findFirst: prismaMocks.findFirst,
+      findMany: prismaMocks.findMany,
+      deleteMany: prismaMocks.deleteMany,
+      update: prismaMocks.update,
     },
   },
 }));
@@ -28,14 +33,14 @@ import { NotFoundError } from "@/domain";
 
 describe("project service IDOR", () => {
   beforeEach(() => {
-    findFirst.mockReset();
-    deleteMany.mockReset();
-    update.mockReset();
-    findMany.mockReset();
+    prismaMocks.findFirst.mockReset();
+    prismaMocks.deleteMany.mockReset();
+    prismaMocks.update.mockReset();
+    prismaMocks.findMany.mockReset();
   });
 
   it("rename of a project in another workspace is not_found", async () => {
-    findMany.mockResolvedValue([]);
+    prismaMocks.findMany.mockResolvedValue([]);
     await expect(
       renameProject({
         workspaceId: "ws-a",
@@ -43,11 +48,11 @@ describe("project service IDOR", () => {
         name: "Hijack",
       }),
     ).rejects.toBeInstanceOf(NotFoundError);
-    expect(update).not.toHaveBeenCalled();
+    expect(prismaMocks.update).not.toHaveBeenCalled();
   });
 
   it("status change scopes the read by workspaceId", async () => {
-    findFirst.mockResolvedValue(null);
+    prismaMocks.findFirst.mockResolvedValue(null);
     await expect(
       setProjectStatus({
         workspaceId: "ws-a",
@@ -55,20 +60,20 @@ describe("project service IDOR", () => {
         status: "archived",
       }),
     ).rejects.toBeInstanceOf(NotFoundError);
-    expect(findFirst).toHaveBeenCalledWith(
+    expect(prismaMocks.findFirst).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { id: "proj-from-ws-b", workspaceId: "ws-a" },
       }),
     );
-    expect(update).not.toHaveBeenCalled();
+    expect(prismaMocks.update).not.toHaveBeenCalled();
   });
 
   it("delete of a foreign workspace id affects 0 rows", async () => {
-    deleteMany.mockResolvedValue({ count: 0 });
+    prismaMocks.deleteMany.mockResolvedValue({ count: 0 });
     await expect(
       deleteProject({ workspaceId: "ws-a", projectId: "proj-from-ws-b" }),
     ).rejects.toBeInstanceOf(NotFoundError);
-    expect(deleteMany).toHaveBeenCalledWith({
+    expect(prismaMocks.deleteMany).toHaveBeenCalledWith({
       where: { id: "proj-from-ws-b", workspaceId: "ws-a" },
     });
   });
