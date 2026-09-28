@@ -1,13 +1,19 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import agentStack from "./eslint-plugin-agent-stack.mjs";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  // Override default ignores of eslint-config-next.
+  {
+    plugins: { "agent-stack": agentStack },
+    files: ["src/**/*.{ts,tsx}"],
+    rules: {
+      "agent-stack/require-define-action": "error",
+    },
+  },
   globalIgnores([
-    // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",
     "build/**",
