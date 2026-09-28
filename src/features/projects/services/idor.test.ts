@@ -1,5 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+/**
+ * Services are server-only. Vitest has no RSC boundary, so the package
+ * throws unless we stub it. Prisma is mocked — this suite only checks that
+ * writes are scoped by workspaceId.
+ */
+vi.mock("server-only", () => ({}));
+
 const findFirst = vi.fn();
 const deleteMany = vi.fn();
 const update = vi.fn();
