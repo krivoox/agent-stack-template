@@ -20,10 +20,6 @@ datasource db {
   provider = "postgresql"
 }
 
-// ============================================================================
-// Better Auth — field names are dictated by the adapter, do not rename them
-// ============================================================================
-
 model User {
   id            String   @id
   name          String
@@ -33,8 +29,6 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  // Profile extensions live here; Better Auth ignores unknown columns as long
-  // as they are nullable or have a default.
   displayName String?
   timezone    String  @default("UTC")
 
@@ -94,10 +88,6 @@ model Verification {
   @@map("verification")
 }
 
-// ============================================================================
-// Tenancy (ADR-003)
-// ============================================================================
-
 enum WorkspaceType {
   personal
   group
@@ -151,7 +141,7 @@ model Invitation {
   workspaceId     String
   email           String
   role            MembershipRole   @default(member)
-  token           String           @unique
+  tokenHash       String           @unique
   status          InvitationStatus @default(pending)
   expiresAt       DateTime
   invitedByUserId String
@@ -164,15 +154,6 @@ model Invitation {
   @@index([email])
   @@map("invitation")
 }
-
-// ============================================================================
-// Example feature — the reference vertical slice
-// ============================================================================
-//
-// `Project` exists to demonstrate the conventions, not because the template
-// needs projects. Delete it (and `src/features/projects/`) once your own
-// domain replaces it. Note the shape every business table should copy:
-// a `workspaceId` with `onDelete: Cascade` and an index on it.
 
 enum ProjectStatus {
   active
