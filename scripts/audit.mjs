@@ -2,13 +2,9 @@
 /**
  * Production audit gate.
  *
- * Raw `npm audit --audit-level=high` fails because:
- *   - Prisma CLI pulls deepmerge-ts / mysql2 (`audit fix --force` downgrades Prisma 7 → 6)
- *   - Next 16.2.9 has a critical next/og RCE patched in 16.3.6, but bumping
- *     it requires committing the regenerated package-lock.json
- *
- * Fails on critical/high outside IGNORE. Drop `next`, `postcss` and `sharp`
- * from IGNORE in the same PR that lands Next 16.3.6 + lockfile.
+ * Raw `npm audit --audit-level=high` fails because Prisma CLI pulls
+ * deepmerge-ts / mysql2 (`audit fix --force` would downgrade Prisma 7 → 6).
+ * Next 16.3.6 is in the runtime graph — do not ignore `next`.
  */
 import { execSync } from "node:child_process";
 
@@ -24,10 +20,6 @@ const IGNORE = new Set([
   "js-yaml",
   "qs",
   "fast-uri",
-  // Temporary until Next 16.3.6 + lockfile.
-  "next",
-  "postcss",
-  "sharp",
 ]);
 
 let report;
