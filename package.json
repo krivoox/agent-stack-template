@@ -1,6 +1,6 @@
 {
   "name": "agent-stack-template",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "license": "MIT",
   "description": "Agent-first multi-tenant Next.js template (rules, sub-agents, skills, Better Auth, Prisma)",

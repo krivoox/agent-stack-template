@@ -9,6 +9,8 @@ see [docs/guides/changelog.md](./docs/guides/changelog.md).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-29
+
 ### Added
 
 - **auth:** Add fail-closed mailer, log helper and cron auth
@@ -28,6 +30,8 @@ see [docs/guides/changelog.md](./docs/guides/changelog.md).
 - **actions:** Enforce minRole on workspace mutations
 
 - **actions:** Add minRole default member to defineWorkspaceAction
+
+- **template:** Promote production-ready stack
 
 ### Fixed
 
@@ -57,5 +61,6 @@ see [docs/guides/changelog.md](./docs/guides/changelog.md).
 - CI: typecheck, lint, test, build and commit-message validation; changelog and
   release automation.
 
-[Unreleased]: https://github.com/krivoox/agent-stack-template/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/krivoox/agent-stack-template/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/krivoox/agent-stack-template/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/krivoox/agent-stack-template/releases/tag/v0.1.0
