@@ -33,6 +33,8 @@ see [docs/guides/changelog.md](./docs/guides/changelog.md).
 
 - **auth:** Accept requireFresh on defineAction
 
+- **deps:** Bump Next to 16.3.6 and stop ignoring it in audit
+
 ## [0.1.0] - 2026-08-20
 
 ### Added
