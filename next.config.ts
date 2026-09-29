@@ -1,23 +1,31 @@
 import type { NextConfig } from "next";
-
-/**
- * Authenticated route prefixes served with `private, no-store`.
- *
- * Anything showing per-user data must never be cached by a CDN or a shared
- * proxy. Add a prefix here when you add a segment under `(app)`; both the bare
- * path and its children are covered.
- */
-const PRIVATE_ROUTE_PREFIXES = ["/dashboard", "/settings"];
+import { PRIVATE_ROUTE_PREFIXES } from "./src/lib/routes";
 
 const NO_STORE = [{ key: "Cache-Control", value: "private, no-store" }];
 
+const SECURITY_HEADERS = [
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+  {
+    key: "Content-Security-Policy",
+    value: [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob: https:",
+      "font-src 'self' data:",
+      "connect-src 'self'",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join("; "),
+  },
+];
+
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  /**
-   * Client Router Cache. `dynamic: 0` means a soft-nav back to a list always
-   * re-fetches, so a mutation is never followed by a stale screen. Perceived
-   * speed comes from `loading.tsx` and prefetch, not from serving old data.
-   */
   experimental: {
     staleTimes: {
       dynamic: 0,
@@ -25,7 +33,18 @@ const nextConfig: NextConfig = {
     },
   },
   async headers() {
+    const security =
+      process.env.NODE_ENV === "production"
+        ? [
+            ...SECURITY_HEADERS,
+            {
+              key: "Strict-Transport-Security",
+              value: "max-age=31536000; includeSubDomains",
+            },
+          ]
+        : SECURITY_HEADERS;
     return [
+      { source: "/:path*", headers: security },
       {
         source: "/_next/static/:path*",
         headers: [

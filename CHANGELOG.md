@@ -9,6 +9,32 @@ see [docs/guides/changelog.md](./docs/guides/changelog.md).
 
 ## [Unreleased]
 
+### Added
+
+- **auth:** Add fail-closed mailer, log helper and cron auth
+
+- **auth:** Fail-closed linking, oauth state, mailer env and headers
+
+- **auth:** Wire fail-closed Better Auth defaults
+
+- **auth:** Add mailer and relax-flag env vars
+
+- **http:** Add security headers and tighten CSP defaults
+
+- **auth:** Hash invitation tokens and add IDOR service tests
+
+- **workspaces:** Store invitation token hashes
+
+- **actions:** Enforce minRole on workspace mutations
+
+- **actions:** Add minRole default member to defineWorkspaceAction
+
+### Fixed
+
+- **auth:** Accept requireFresh on defineAction
+
+- **deps:** Bump Next to 16.3.6 and stop ignoring it in audit
+
 ## [0.1.0] - 2026-08-20
 
 ### Added

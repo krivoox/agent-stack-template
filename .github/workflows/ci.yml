@@ -15,11 +15,9 @@ permissions:
 
 jobs:
   verify:
-    name: Typecheck · Lint · Test · Build
+    name: Typecheck · Lint · Test · Audit · Build
     runs-on: ubuntu-latest
     env:
-      # Enough to satisfy the env schema and let Prisma generate a client.
-      # No migration runs here, so the database never has to exist.
       DATABASE_URL: postgresql://user:pass@localhost:5432/db?schema=public
       DIRECT_URL: postgresql://user:pass@localhost:5432/db?schema=public
       BETTER_AUTH_SECRET: ci-secret-value-at-least-32-characters-long
@@ -32,8 +30,6 @@ jobs:
           node-version: '22'
           cache: npm
 
-      # `npm ci` runs postinstall → prisma generate, so the client exists
-      # before typecheck. Ordering matters: tsc fails without it.
       - name: Install
         run: npm ci
 
@@ -45,6 +41,9 @@ jobs:
 
       - name: Test
         run: npm run test
+
+      - name: Audit
+        run: npm run audit
 
       - name: Build
         run: npm run build
@@ -66,7 +65,6 @@ jobs:
       - name: Install
         run: npm ci
 
-      # The local hook can be bypassed with --no-verify; this cannot.
       - name: Validate commits in this PR
         run: >
           npx commitlint

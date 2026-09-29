@@ -6,5 +6,5 @@ export {
 export type { ActiveWorkspaceContext } from "./active-workspace";
 export { createPersonalWorkspaceForUser } from "./create-personal-workspace";
 export type { CreatePersonalWorkspaceInput } from "./create-personal-workspace";
-export { requireMembership } from "./require-membership";
-export type { MembershipContext } from "./require-membership";
+export { requireMembership } from "@/lib/tenancy";
+export type { MembershipContext } from "@/lib/tenancy";
